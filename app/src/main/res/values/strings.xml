@@ -6,4 +6,7 @@
     <string name="second_fragment_label">Details</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="tvFindMovies">The most popular movies of:</string>
+    <string name="btnSubmit">SUBMIT</string>
+    <string name="tilHint">Year</string>
 </resources>

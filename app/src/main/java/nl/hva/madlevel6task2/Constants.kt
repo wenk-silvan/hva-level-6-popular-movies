@@ -6,7 +6,7 @@ object Constants {
     const val apiTimeout: Long = 5_000
 
     // API for Movies
-    const val baseUrlMovie = "https://api.themoviedb.org/3/discover/movie"
+    const val baseUrlMovie = "https://api.themoviedb.org/3/discover/movie/"
     const val year = "&year="
 
     // API for Images
