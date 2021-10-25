@@ -38,6 +38,7 @@ class MoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerViews()
         binding.btnSubmit.setOnClickListener {
+            binding.progressBar.visibility = View.VISIBLE
             viewModel.getPopularMovies(binding.tilYear.editText?.text.toString())
         }
         observeMovies()
@@ -80,6 +81,7 @@ class MoviesFragment : Fragment() {
 
     private fun observeMovies() {
         viewModel.movies.observe(viewLifecycleOwner, {
+            binding.progressBar.visibility = View.GONE
             Snackbar.make(binding.root, "Fetched movies", Snackbar.LENGTH_SHORT).show()
             Log.i("Movies", it.totalResults.toString())
             movies.clear()
@@ -88,6 +90,7 @@ class MoviesFragment : Fragment() {
         })
 
         viewModel.errorText.observe(viewLifecycleOwner, {
+            binding.progressBar.visibility = View.GONE
             Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
         })
     }

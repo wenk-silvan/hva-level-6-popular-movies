@@ -1,6 +1,7 @@
 package nl.hva.madlevel6task2.vm
 
 import android.app.Application
+import android.app.ProgressDialog
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
