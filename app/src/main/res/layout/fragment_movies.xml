@@ -31,6 +31,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tietYear"
+                android:maxLength="4"
+                android:inputType="numberDecimal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1" />

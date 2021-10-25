@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -19,12 +19,14 @@ import nl.hva.madlevel6task2.model.Movie
 import nl.hva.madlevel6task2.vm.MoviesViewModel
 import kotlin.math.floor
 
+const val BUNDLE_MOVIE_ID = "bundle_movie_id"
+
 class MoviesFragment : Fragment() {
     val viewModel: MoviesViewModel by activityViewModels()
     private var _binding: FragmentMoviesBinding? = null
     private val binding get() = _binding!!
     private val movies: ArrayList<Movie> = arrayListOf()
-    private val movieAdapter = MovieAdapter(movies, ::onMovieClick)
+    private val movieAdapter = MovieAdapter(movies, ::onMovieClicked)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,10 +39,7 @@ class MoviesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerViews()
-        binding.btnSubmit.setOnClickListener {
-            binding.progressBar.visibility = View.VISIBLE
-            viewModel.getPopularMovies(binding.tilYear.editText?.text.toString())
-        }
+        binding.btnSubmit.setOnClickListener { onSubmitClicked() }
         observeMovies()
     }
 
@@ -49,13 +48,11 @@ class MoviesFragment : Fragment() {
         _binding = null
     }
 
-    private fun onMovieClick(movie: Movie) {
-        Snackbar.make(
-            binding.rvMovies,
-            "You clicked the movie: ${movie.title}",
-            Snackbar.LENGTH_LONG
+    private fun onMovieClicked(movie: Movie) {
+        findNavController().navigate(
+            R.id.action_MoviesFragment_to_MovieDetailsFragment,
+            bundleOf(Pair(BUNDLE_MOVIE_ID, movie.id))
         )
-            .show()
     }
 
     private fun initRecyclerViews() {
@@ -82,8 +79,6 @@ class MoviesFragment : Fragment() {
     private fun observeMovies() {
         viewModel.movies.observe(viewLifecycleOwner, {
             binding.progressBar.visibility = View.GONE
-            Snackbar.make(binding.root, "Fetched movies", Snackbar.LENGTH_SHORT).show()
-            Log.i("Movies", it.totalResults.toString())
             movies.clear()
             movies.addAll(it.results)
             movieAdapter.notifyDataSetChanged()
@@ -93,5 +88,21 @@ class MoviesFragment : Fragment() {
             binding.progressBar.visibility = View.GONE
             Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
         })
+    }
+
+    private fun onSubmitClicked() {
+        val input = binding.tilYear.editText?.text
+        if (input.isNullOrBlank() || input.toString().toInt() < 1950 || input.toString()
+                .toInt() > 2021
+        ) {
+            Snackbar.make(
+                binding.root,
+                "Can't load movies, invalid date picked.",
+                Snackbar.LENGTH_SHORT
+            ).show()
+            return
+        }
+        binding.progressBar.visibility = View.VISIBLE
+        viewModel.getPopularMovies(binding.tilYear.editText?.text.toString())
     }
 }

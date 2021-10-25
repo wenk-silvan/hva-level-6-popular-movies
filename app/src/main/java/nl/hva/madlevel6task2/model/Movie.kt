@@ -42,5 +42,5 @@ data class Movie(
     @SerializedName("vote_count") val vote_count: Int
 ) {
     fun getPosterUrl() = Constants.baseUrlImg + Constants.imgSizeS + poster_path
-    fun getBackdropUrl() = Constants.baseUrlImg + Constants.imgSizeS + backdrop_path
+    fun getBackdropUrl() = Constants.baseUrlImg + Constants.imgSizeL + backdrop_path
 }

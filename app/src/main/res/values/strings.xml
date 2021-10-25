@@ -9,4 +9,5 @@
     <string name="tvFindMovies">The most popular movies of:</string>
     <string name="btnSubmit">SUBMIT</string>
     <string name="tilHint">Year</string>
+    <string name="tvOverviewLabel">Overview</string>
 </resources>
