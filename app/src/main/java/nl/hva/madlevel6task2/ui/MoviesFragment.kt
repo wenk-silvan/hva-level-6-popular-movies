@@ -38,7 +38,7 @@ class MoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerViews()
         binding.btnSubmit.setOnClickListener {
-            viewModel.getPopularMovies(binding.tvFindMovies.text.toString())
+            viewModel.getPopularMovies(binding.tilYear.editText?.text.toString())
         }
         observeMovies()
     }
