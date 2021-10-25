@@ -23,7 +23,7 @@ class MoviesFragment : Fragment() {
     val viewModel: MoviesViewModel by activityViewModels()
     private var _binding: FragmentMoviesBinding? = null
     private val binding get() = _binding!!
-    private val movies = arrayListOf<Movie>()
+    private val movies: ArrayList<Movie> = arrayListOf()
     private val movieAdapter = MovieAdapter(movies, ::onMovieClick)
 
     override fun onCreateView(
@@ -58,7 +58,7 @@ class MoviesFragment : Fragment() {
     }
 
     private fun initRecyclerViews() {
-        val gridLayoutManager = GridLayoutManager(requireContext(), 1, RecyclerView.VERTICAL, false)
+        val gridLayoutManager = GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false)
         binding.rvMovies.layoutManager = gridLayoutManager
         binding.rvMovies.adapter = movieAdapter
 //        binding.rvMovies.viewTreeObserver.addOnGlobalLayoutListener(object :
@@ -82,6 +82,9 @@ class MoviesFragment : Fragment() {
         viewModel.movies.observe(viewLifecycleOwner, {
             Snackbar.make(binding.root, "Fetched movies", Snackbar.LENGTH_SHORT).show()
             Log.i("Movies", it.totalResults.toString())
+            movies.clear()
+            movies.addAll(it.results)
+            movieAdapter.notifyDataSetChanged()
         })
 
         viewModel.errorText.observe(viewLifecycleOwner, {
