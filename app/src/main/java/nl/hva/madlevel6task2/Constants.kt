@@ -7,7 +7,7 @@ object Constants {
 
     // API for Movies
     const val baseUrlMovie = "https://api.themoviedb.org/3/discover/movie/"
-    const val year = "&year="
+    const val year = "primary_release_year"
 
     // API for Images
     const val baseUrlImg = "https://image.tmdb.org/t/p/"
