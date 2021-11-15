@@ -1,11 +1,13 @@
 package nl.hva.madlevel6task2.ui
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.google.android.material.snackbar.Snackbar
 import nl.hva.madlevel6task2.R
 import nl.hva.madlevel6task2.databinding.ActivityMainBinding
 

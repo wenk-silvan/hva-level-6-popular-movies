@@ -1,11 +1,13 @@
 package nl.hva.madlevel6task2.ui
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -27,6 +29,7 @@ class MoviesFragment : Fragment() {
     private val binding get() = _binding!!
     private val movies: ArrayList<Movie> = arrayListOf()
     private val movieAdapter = MovieAdapter(movies, ::onMovieClicked)
+    private var gridLayoutManager: GridLayoutManager? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +37,15 @@ class MoviesFragment : Fragment() {
     ): View? {
         _binding = FragmentMoviesBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Snackbar.make(binding.root, "Landscape Mode", Snackbar.LENGTH_SHORT).show()
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Snackbar.make(binding.root, "Portrait Mode", Snackbar.LENGTH_SHORT).show()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,17 +68,17 @@ class MoviesFragment : Fragment() {
     }
 
     private fun initRecyclerViews() {
-        val gridLayoutManager = GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false)
+        gridLayoutManager = GridLayoutManager(requireContext(), 1, RecyclerView.VERTICAL, false)
         binding.rvMovies.layoutManager = gridLayoutManager
         binding.rvMovies.adapter = movieAdapter
-//        binding.rvMovies.viewTreeObserver.addOnGlobalLayoutListener(object :
-//            ViewTreeObserver.OnGlobalLayoutListener {
-//            override fun onGlobalLayout() {
-//                binding.rvMovies.viewTreeObserver.removeOnGlobalLayoutListener(this)
-//                gridLayoutManager.spanCount = calculateSpanCount()
-//                gridLayoutManager.requestLayout()
-//            }
-//        })
+        binding.rvMovies.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.rvMovies.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                gridLayoutManager!!.spanCount = calculateSpanCount()
+                gridLayoutManager!!.requestLayout()
+            }
+        })
     }
 
     private fun calculateSpanCount(): Int {
